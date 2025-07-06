@@ -10,6 +10,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql_person:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_CONFIG_LOCATION: file:/config/application.yml
+    volumes:
+      - /home/ubuntu/configs/application.yml:/config/application.yml
     depends_on:
       mysql:
         condition: service_healthy
