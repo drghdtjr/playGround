@@ -17,8 +17,8 @@ jobs:
 
       - name: Set Docker Image Tag
         run: |
-          VERSION="v1.0.${{ github.run_number }}"
-          echo "DOCKER_IMAGE_TAG=${VERSION}" >> $GITHUB_ENV
+          VERSION="v1.0-${GITHUB_SHA::7}"
+          echo "DOCKER_IMAGE_TAG=$VERSION" >> $GITHUB_ENV
           echo "Using version: $VERSION"
 
       - name: Set up JDK 17
@@ -41,25 +41,13 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-app:$DOCKER_IMAGE_TAG .
           docker push ${{ secrets.DOCKER_USERNAME }}/springboot-app:$DOCKER_IMAGE_TAG
 
-      - name: Create docker-compose.yml from secret
-        run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
-
-      - name: Create application.yml from secret
-        run: echo "${{ secrets.APPLICATION_YML }}" > application.yml
-
-      - name: Create .env from secret
-        run: echo "${{ secrets.ENV_FILE }}" > .env
-
-      - name: Copy config files to Server
+      - name: Copy docker-compose.prod.yml to Server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: |
-            docker-compose.yml
-            application.yml
-            .env
+          source: docker-compose.prod.yml
           target: /home/ubuntu/
 
       - name: Deploy on Remote Server
@@ -72,7 +60,7 @@ jobs:
             export IMAGE_TAG=${{ env.DOCKER_IMAGE_TAG }}
             echo "Deploying version: $IMAGE_TAG"
             cd /home/ubuntu
-            docker-compose pull
-            docker-compose down || true
-            docker-compose up -d
+            docker-compose -f docker-compose.prod.yml pull
+            docker-compose -f docker-compose.prod.yml down || true
+            docker-compose -f docker-compose.prod.yml up -d
             echo "Deployment complete."
