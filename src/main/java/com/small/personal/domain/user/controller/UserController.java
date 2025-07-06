@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Tag(name = "User", description = "회원관리 API")
+@Tag(name = "User", description = "회원관리 API CICD  테스트")
 @RequestMapping("/api/v1/users")
 @RestController
 @RequiredArgsConstructor

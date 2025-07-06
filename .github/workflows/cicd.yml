@@ -64,7 +64,7 @@ jobs:
           script: |
             echo "Deploying version: $DOCKER_IMAGE_TAG"
             cd /home/ubuntu
-            docker-compose -f docker-compose.prod.yml pull
-            docker-compose -f docker-compose.prod.yml down || true
-            docker-compose -f docker-compose.prod.yml up -d
+            sudo docker-compose -f docker-compose.prod.yml backend pull
+            sudo docker-compose -f docker-compose.prod.yml backend down || true
+            sudo docker-compose -f docker-compose.prod.yml backend up 
             echo "Deployment complete."
