@@ -3,7 +3,7 @@ version: '3.8'
 services:
   application:
     container_name: backend
-    image: your_dockerhub_username/springboot-app:latest  # 최신 도커허브 이미지 사용
+    image: kimhongseok/springboot-app:latest
     ports:
       - "8080:8080"
     environment:
